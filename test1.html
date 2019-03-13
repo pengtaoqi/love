@@ -7,8 +7,14 @@
     <title>Document</title>
 </head>
 <body>
-    <audio autoplay="" loop=""><source src="https://m10.music.126.net/20190313164402/be9717d7bda35c49de3fa54c9f203c88/ymusic/8414/3dae/146d/3cad737c367e1013d19a59e361ed5256.mp3"></audio>
+  <embed src="./3cad737c367e1013d19a59e361ed5256.mp3" hidden="true" autostart="true" loop="true">
     <div id="box"></div>
+    <div id="text" class="text">
+
+		</div>
+		<div id="canvasZone">
+			<canvas id="myCanvas"></canvas>
+		</div>
 </body>
 <style>
     *{
@@ -20,24 +26,137 @@
         background-size:cover;
         background-repeat:no-repeat
     }
-    #box{
+    #box,#text{
         padding:20px 5%;
         color:#fff;
     }
 </style>
 <script>
     var box = document.querySelector('#box')
-    var text = 'Meeting you was fate, and falling in love with you was out of my control.'
+    var text = ''
     function fillText (txt) {
         box.innerHTML = txt
     }
-    var i = 1
+    var u = 1
     var t = setInterval(function(){
-      fillText(text.slice(0, i))
-      i++;
-      if(i > text.length){
+      fillText(text.slice(0, u))
+      u++;
+      if(u > text.length){
           clearInterval(t)
       }
     },300);
+
+    var r = 3;
+		var radian; //弧度  
+		var i;
+		var radianDecrement; //弧度增量  
+		var time = 5; //每个点之间的时间间隔  
+		var intervalId;
+		var num = 360; //分割为 360 个点  
+		var startRadian = Math.PI;
+		var ctx;
+		var startX = 100;
+		var startY = 80;
+		window.onload = function() {
+			startAnimation();
+			setTimeout(function() {
+				startX = 155;
+				startY = 70;
+				ctx.moveTo(startX, startY);
+				
+				drawHeart();
+				ctx.strokeStyle = "aqua"
+			}, 2500);
+			setTimeout(function() {
+				textLove();
+			}, 6000);
+			setTimeout(function() {
+				ctx.strokeStyle = "red"
+				addText();
+			}, 6000)
+		}
+		function textLove() {
+			ctx.lineWidth = 2;
+			var x = 40;
+			var y = 100;
+			ctx.moveTo(x, y);
+			textLove = setInterval(function(){
+				ctx.lineTo(x, 110-0.25*x);
+				x++;
+				y++;
+				ctx.stroke();
+				if(x==220){
+					clearInterval(textLove)
+				}
+			},10);
+			
+			setTimeout(function(){
+				ctx.strokeStyle = "aqua"
+				ctx.lineTo(220, 55);
+				ctx.lineTo(210, 50)
+				ctx.moveTo(221, 55);
+				ctx.lineTo(213, 65);
+				ctx.stroke();
+			},1900);
+			
+		}
+
+		function addText() {
+			var context = " 刘云我想做你的保护伞，无论以什么样的身份，别躲着我！Meeting you was fate, and falling in love with you was out of my control.";
+			let arr = new Array();
+			arr = context.split("");
+			var str = "";
+			var index = 0;
+			addText = setInterval(function() {
+				str = document.getElementById("text").innerHTML;
+				str += arr[index];
+				index++;
+				document.getElementById("text").innerHTML = str;
+				if (index == arr.length) {
+					clearInterval(addText)
+				}
+			}, 120)
+		}
+
+		
+
+		function startAnimation() {
+			ctx = document.getElementById("myCanvas").getContext("2d");
+			//让画布撑满整个屏幕，-20是滚动条的位置，需留出。如滚动条出现则会挤压画布。  
+			WINDOW_HEIGHT = document.documentElement.clientHeight - 20;
+			WINDOW_WIDTH = document.documentElement.clientWidth - 20;
+			ctx.width = WINDOW_WIDTH;
+			ctx.heigh = WINDOW_HEIGHT;
+			drawHeart();
+		}
+
+		function drawHeart() {
+			ctx.strokeStyle = "red";
+			ctx.lineWidth = 2; //设置线的宽度  
+			radian = startRadian; //弧度设为初始弧度  
+			radianDecrement = Math.PI / num * 2;
+			ctx.moveTo(getX(radian), getY(radian)); //移动到初始点  
+			i = 0;
+			intervalId = setInterval("printHeart()", time);
+		}
+
+		function printHeart() {
+			radian += radianDecrement;
+			ctx.lineTo(getX(radian), getY(radian)); //在旧点和新点之间连线  
+			i++;
+			ctx.stroke(); //画线  
+			if (i >= num) {
+				clearInterval(intervalId);
+			}
+		}
+
+		function getX(t) { //由弧度得到 X 坐标  
+			return startX + r * (16 * Math.pow(Math.sin(t), 3));
+		}
+
+		function getY(t) { //由弧度得到 Y 坐标  
+			return startY - r * (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+		}
+
 </script>
 </html>
