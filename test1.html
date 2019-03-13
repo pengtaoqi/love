@@ -7,7 +7,8 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <audio autoplay="" loop=""><source src="./3cad737c367e1013d19a59e361ed5256.mp3"></audio>
+    <div id="box"></div>
 </body>
 <style>
     *{
@@ -19,5 +20,24 @@
         background-size:cover;
         background-repeat:no-repeat
     }
+    #box{
+        padding:20px 5%;
+        color:#fff;
+    }
 </style>
+<script>
+    var box = document.querySelector('#box')
+    var text = 'Meeting you was fate, and falling in love with you was out of my control.'
+    function fillText (txt) {
+        box.innerHTML = txt
+    }
+    var i = 1
+    var t = setInterval(function(){
+      fillText(text.slice(0, i))
+      i++;
+      if(i > text.length){
+          clearInterval(t)
+      }
+    },300);
+</script>
 </html>
